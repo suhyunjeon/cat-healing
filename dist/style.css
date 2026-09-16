@@ -7,3 +7,8 @@
 @media(max-width:700px){.meal-spot,.water-spot{display:none}.cat-anchor{width:43%;left:28%;top:52%}.mobile-journal{display:block;position:absolute;right:14px;bottom:194px;border:2px solid #fff8e5;background:#fff8e9ed;border-radius:15px;padding:12px 15px;font-size:13px;z-index:4}.daily-note{position:relative;inset:auto;width:auto;transform:none;margin:25px 0 5px;padding:22px;box-shadow:none;background:#f1ead7}.daily-note h2{font-size:18px}#quests{font-size:14px;line-height:2.2}#claimQuest{font-size:13px;padding:10px}.room-caption{bottom:174px}}
 
 @media(max-width:700px){.rest-spot{top:37%}}
+
+.going-to-water .cat-anchor{left:72%;top:40%;width:18%}
+.drinking .head{animation:drink .65s ease-in-out infinite}
+@keyframes drink{0%,100%{transform:translateY(8px) rotate(8deg)}50%{transform:translateY(15px) rotate(11deg)}}
+@media(max-width:700px){.going-to-water .cat-anchor{left:56%;top:43%;width:36%}.going-to-water .cat-anchor:after{content:'🥣';position:absolute;bottom:0;left:31%;font-size:32px;filter:hue-rotate(165deg);pointer-events:none}}
