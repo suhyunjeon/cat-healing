@@ -29,3 +29,28 @@
 .furniture-art.art-gold{background-image:url('assets/gold-cat-tower.png');background-size:contain;background-position:center}#roomDecor [data-item=goldTower]{width:21%;filter:drop-shadow(0 0 9px #f7d46a99) drop-shadow(0 6px 5px #66533330)}@media(max-width:700px){#roomDecor [data-item=goldTower]{width:28%}}
 
 .has-pee:not(.has-poop):before{content:'💧';position:absolute;right:-9px;top:-15px;font-size:24px}
+/* Keep the entire room in view on phones instead of cropping its facilities. */
+@media(max-width:700px){
+  .game{background:linear-gradient(#e8d5b8 0%,#ead9b9 55%,#d9c49e 100%)}
+  .room-background{top:170px;bottom:auto;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;object-position:center}
+  .window-spot{top:calc(170px + 12vw);left:3%;padding:7px 10px}
+  .tower-spot{top:calc(170px + 12vw);right:25%;padding:7px 10px}
+  .rest-spot{top:calc(170px + 31vw);left:3%;padding:7px 10px}
+  .window-spot small,.tower-spot small,.rest-spot small{display:none}
+  .meal-spot,.water-spot,.toilet-spot{display:block;top:calc(170px + 70vw);bottom:auto;width:29%;padding:9px 4px;text-align:center;border-radius:13px;min-height:52px}
+  .meal-spot{left:3%;right:auto}.water-spot{left:35.5%;right:auto}.toilet-spot{left:68%;right:auto}
+  .meal-spot b:before{content:'🥣 ';}.water-spot b:before{content:'💧 ';}.toilet-spot b:before{content:'🚽 ';}
+  .meal-spot small,.water-spot small,.toilet-spot small{font-size:10px;line-height:1.3}
+  .meal-spot:after,.water-spot:after,.toilet-spot:after{display:none}
+  .cat-anchor{left:36%;top:calc(170px + 43vw);width:31%}
+  .bubble{min-width:130px;max-width:180px;font-size:12px;padding:8px 12px}
+  .eating .cat-anchor{left:64%;top:calc(170px + 33vw);width:25%}
+  .going-to-water .cat-anchor{left:72%;top:calc(170px + 33vw);width:25%}
+  .going-to-water .cat-anchor:after{display:none}
+  .toileting .cat-anchor{left:79%;top:calc(170px + 33vw);width:23%}
+  .sleeping .cat-anchor{left:15%;top:calc(170px + 30vw);width:28%}
+  .watching .cat-anchor{left:17%;top:calc(170px + 18vw);width:28%}
+  .decorate{width:60px;height:60px;bottom:184px}.decorate span{font-size:24px}
+}
+@media(min-width:501px) and (max-width:700px){.game{min-height:940px}}
+@media(max-width:700px){.game{min-height:max(700px,calc(480px + 70vw));max-height:none}}
