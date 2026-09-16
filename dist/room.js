@@ -33,6 +33,7 @@
       state.busy=false;
       render();
     }
+    if(state.water>=100)await useToilet('pee');
   };
   $('brushCat').onclick=()=>{if(!available())return;state.happy=Math.min(100,state.happy+6);game.classList.add('purring');setTimeout(()=>game.classList.remove('purring'),1600);say('살살 빗어 주니까… 고르릉.');hearts();render()};
   $('watchWindow').onclick=()=>{if(!available())return;state.busy=true;game.classList.add('watching');say('나뭇잎이 살랑살랑… 새가 왔나?');render();setTimeout(()=>{game.classList.remove('watching');state.busy=false;render()},3500)};

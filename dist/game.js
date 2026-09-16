@@ -4,7 +4,7 @@ function named(text){const code=catName.charCodeAt(catName.length-1);const final
 const nameNodes=[];const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);while(walker.nextNode()){const node=walker.currentNode;if(!['SCRIPT','STYLE','INPUT'].includes(node.parentElement.tagName)&&node.textContent.includes('두부'))nameNodes.push([node,node.textContent])}const nameAttrs=[];document.querySelectorAll('[aria-label]').forEach(el=>{if(el.getAttribute('aria-label').includes('두부'))nameAttrs.push([el,el.getAttribute('aria-label')])});
 function updateName(){nameNodes.forEach(([node,text])=>node.textContent=named(text));nameAttrs.forEach(([el,text])=>el.setAttribute('aria-label',named(text)));document.querySelector('.avatar').textContent=Array.from(catName)[0];document.title=catName+'의 작은 식탁';$('catName').value=catName;if(typeof state!=='undefined')updateCaption()}
 function updateCaption(){$('caption').textContent=named(state.toileting?'두부가 화장실에 다녀오는 중이에요':state.sleeping?'낮잠 버튼을 누르면 두부가 일어나요':'두부를 톡 눌러 쓰다듬어 주세요')}
-const state={full:45,happy:60,hearts:0,sleeping:false,busy:false,toileting:false,poops:0};let sound=false,audio;const game=document.querySelector('.game');
+const state={full:45,happy:60,hearts:0,sleeping:false,busy:false,toileting:false,poops:0,pees:0};let sound=false,audio;const game=document.querySelector('.game');
 function render(){for(const [k,v]of [['full',state.full],['happy',state.happy]]){$(k+'Text').textContent=Math.round(v)+'%';$(k+'Bar').style.width=v+'%'}$('hearts').textContent=state.hearts;$('napLabel').textContent=state.sleeping?'일어나기':'낮잠 자기';$('mood').textContent=state.sleeping?'꿈꾸는 고양이':state.happy>=85?'행복한 고양이':'느긋한 고양이';$('level').textContent=state.hearts>=60?'집사 곁이 제일 좋아요':state.hearts>=25?'우린 꽤 친해졌어요':'우리, 알아가는 중이에요';game.classList.toggle('sleeping',state.sleeping);game.classList.toggle('toileting',state.toileting);$('petCat').disabled=state.busy;document.querySelectorAll('[data-action]').forEach(b=>b.disabled=state.busy);renderToilet()}
 function say(t){$('bubble').textContent=named(t)}function notes(){if(!sound)return;audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume();[523.25,659.25,783.99].forEach((f,i)=>{let o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime+i*.13;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.035,t+.03);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.55)})}function hearts(){for(let i=0;i<4;i++){let p=document.createElement('span');p.className='particle';p.textContent=state.sleeping?'z':'♥';p.style.left=(44+Math.random()*15)+'%';p.style.setProperty('--drift',(Math.random()*80-40)+'px');p.style.animationDelay=i*.12+'s';$('particles').append(p);setTimeout(()=>p.remove(),2200)}}
 async function act(action){if(!['meal','treat','pet','nap'].includes(action))throw Error('알 수 없는 행동이에요.');if(state.busy)return{ok:false,message:state.toileting?'두부가 화장실에 다녀오는 중이에요.':'두부가 맛있게 먹는 중이에요.'};if(state.sleeping&&action!=='nap'){say('쿨쿨… 조금만 더 쉬고 싶어.');return{ok:false,message:'먼저 두부를 깨워 주세요.'}}if(action==='nap'){state.sleeping=!state.sleeping;state.happy=Math.min(100,state.happy+3);say(state.sleeping?'집사 옆이라… 잠이 솔솔…':'잘 잤다! 집사야, 같이 놀자.');updateCaption();if(state.sleeping)hearts();render();return{ok:true,...state}}
@@ -22,20 +22,24 @@ let savedCharacter='cheese';try{const saved=localStorage.getItem('cozy-cat-chara
 function renderToilet(){
   // Do not re-announce unchanged status on every hunger/water timer tick.
   const text=(id,value)=>{if($(id).textContent!==value)$(id).textContent=value};
-  text('toiletCount',state.poops?'맛동산 '+state.poops+'개':'깨끗한 모래');
+  const dirty=state.poops>0||state.pees>0;
+  const contents=[state.poops?'맛동산 '+state.poops+'개':'',state.pees?'소변 모래 '+state.pees+'개':''].filter(Boolean).join(' · ');
+  text('toiletCount',dirty?contents:'깨끗한 모래');
   $('litterBox').classList.toggle('has-poop',state.poops>0);
+  $('litterBox').classList.toggle('has-pee',state.pees>0);
   $('litterBox').setAttribute('aria-label','화장실 열기 · '+$('toiletCount').textContent);
-  text('litterContents',state.poops?'💩 '.repeat(Math.min(state.poops,12)):'✨');
-  text('toiletMessage',state.toileting?'쉬… 지금 화장실에 있는 중이에요.':state.poops?'맛동산 '+state.poops+'개가 생겼어요! 모래를 치워 주세요.':'청소 완료! 보송보송 깨끗한 모래예요.');
-  text('cleanToilet',state.toileting?'고양이가 사용 중이에요':state.poops?'모래 치우기':'완료 · 방으로 돌아가기');
+  text('litterContents',dirty?'💩 '.repeat(Math.min(state.poops,6))+'🟡 '.repeat(Math.min(state.pees,6)):'✨');
+  $('litterContents').setAttribute('aria-label',dirty?contents:'깨끗한 모래');
+  text('toiletMessage',state.toileting?'쉬… 지금 화장실에 있는 중이에요.':dirty?contents+'가 있어요. 노란 덩어리는 소변이 뭉친 모래예요.':'청소 완료! 보송보송 깨끗한 모래예요.');
+  text('cleanToilet',state.toileting?'고양이가 사용 중이에요':dirty?'모래 치우기':'완료 · 방으로 돌아가기');
   $('cleanToilet').disabled=state.toileting;
 }
-async function useToilet(){
+async function useToilet(kind='poop'){
   if(state.busy||state.sleeping)return;
   state.busy=true;state.toileting=true;game.classList.remove('purring');
-  say('배가 빵빵… 화장실 다녀올게!');updateCaption();render();
+  say(kind==='pee'?'쉬 마려워… 화장실 다녀올게!':'배가 빵빵… 화장실 다녀올게!');updateCaption();render();
   await new Promise(resolve=>setTimeout(resolve,2600));
-  state.poops=Math.min(999,state.poops+1);state.full=55;
+  if(kind==='pee'){state.pees=Math.min(999,state.pees+1);state.water=55}else{state.poops=Math.min(999,state.poops+1);state.full=55}
   say('모래를 덮고… 아, 시원하다냥!');render();
   await new Promise(resolve=>setTimeout(resolve,1000));
   state.toileting=false;render();
@@ -46,8 +50,8 @@ $('openToilet').onclick=$('litterBox').onclick=()=>{renderToilet();$('toiletDial
 $('closeToilet').onclick=()=>$('toiletDialog').close();
 $('cleanToilet').onclick=()=>{
   if(state.toileting)return;
-  if(!state.poops){$('toiletDialog').close();return}
-  state.poops=0;
+  if(!state.poops&&!state.pees){$('toiletDialog').close();return}
+  state.poops=0;state.pees=0;
   render();
   say('깨끗하게 치워 줘서 고마워, 집사야!');
 };

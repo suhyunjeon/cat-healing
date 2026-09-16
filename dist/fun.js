@@ -14,8 +14,8 @@
   ];
   let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false};
   const number=(n,max=1000000)=>Number.isFinite(n)?Math.max(0,Math.min(max,n)):0;
-  try {const saved=JSON.parse(localStorage.getItem('cozy-cat-progress'));if(saved){progress.xp=number(saved.xp);progress.owned=items.filter(i=>saved.owned?.includes(i.id)).map(i=>i.id);progress.shown=progress.owned.filter(id=>saved.shown?.includes(id));if(saved.day===day()){progress.counts={meal:number(saved.counts?.meal),pet:number(saved.counts?.pet),play:number(saved.counts?.play)};progress.claimed=saved.claimed===true}state.poops=Math.floor(number(saved.poops,999));state.hearts=number(saved.hearts);state.full=number(saved.full,100);state.happy=number(saved.happy,100)}}catch{}
-  function save(){try{localStorage.setItem('cozy-cat-progress',JSON.stringify({...progress,poops:state.poops,hearts:state.hearts,full:state.full,happy:state.happy}))}catch{$('funMessage').textContent='이 브라우저에서는 진행을 저장할 수 없어요.'}}
+  try {const saved=JSON.parse(localStorage.getItem('cozy-cat-progress'));if(saved){progress.xp=number(saved.xp);progress.owned=items.filter(i=>saved.owned?.includes(i.id)).map(i=>i.id);progress.shown=progress.owned.filter(id=>saved.shown?.includes(id));if(saved.day===day()){progress.counts={meal:number(saved.counts?.meal),pet:number(saved.counts?.pet),play:number(saved.counts?.play)};progress.claimed=saved.claimed===true}state.poops=Math.floor(number(saved.poops,999));state.pees=Math.floor(number(saved.pees,999));state.hearts=number(saved.hearts);state.full=number(saved.full,100);state.happy=number(saved.happy,100)}}catch{}
+  function save(){try{localStorage.setItem('cozy-cat-progress',JSON.stringify({...progress,poops:state.poops,pees:state.pees,hearts:state.hearts,full:state.full,happy:state.happy}))}catch{$('funMessage').textContent='이 브라우저에서는 진행을 저장할 수 없어요.'}}
   function freshDay(){if(progress.day!==day()){progress.day=day();progress.counts={meal:0,pet:0,play:0};progress.claimed=false}}
   const missions=[['meal','든든하게 한 끼',1],['pet','다정하게 쓰다듬기',3],['play','낚싯대로 한 번 놀기',1]];
   let lastUI="";

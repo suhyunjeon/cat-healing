@@ -27,3 +27,5 @@
 .furniture-art{border-radius:18px;overflow:hidden}#roomDecor .premium-decor{border-radius:0}
 
 .furniture-art.art-gold{background-image:url('assets/gold-cat-tower.png');background-size:contain;background-position:center}#roomDecor [data-item=goldTower]{width:21%;filter:drop-shadow(0 0 9px #f7d46a99) drop-shadow(0 6px 5px #66533330)}@media(max-width:700px){#roomDecor [data-item=goldTower]{width:28%}}
+
+.has-pee:not(.has-poop):before{content:'💧';position:absolute;right:-9px;top:-15px;font-size:24px}
