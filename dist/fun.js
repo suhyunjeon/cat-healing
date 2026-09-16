@@ -1,6 +1,16 @@
 (() => {
   const day = () => new Date().toLocaleDateString('sv-SE');
-  const items = [{id:'yarn',name:'알록달록 실타래',icon:'🧶',cost:20,left:'23%'},{id:'plant',name:'꽃 한 송이',icon:'🌷',cost:35,left:'72%'},{id:'cushion',name:'포근한 곰 인형',icon:'🧸',cost:50,left:'82%'}];
+  const items = [
+    {id:'yarn',name:'알록달록 실타래',icon:'🧶',cost:20,left:'23%'},
+    {id:'plant',name:'꽃 한 송이',icon:'🌷',cost:35,left:'72%'},
+    {id:'cushion',name:'포근한 곰 인형',icon:'🧸',cost:50,left:'82%'},
+    {id:'fountain',name:'프리미엄 정수기',cost:180,left:'76%',bottom:'32%',art:3,description:'찰랑이는 물결, 세이지빛 포인트'},
+    {id:'feeder',name:'스마트 자동급식기',cost:350,left:'65%',bottom:'32%',art:2,description:'식사 공간을 완성하는 똑똑한 디자인'},
+    {id:'rattan',name:'라탄 라운지 침대',cost:450,left:'14%',bottom:'25%',art:5,description:'폭신한 쿠션을 품은 아늑한 쉼터'},
+    {id:'tower',name:'원목 캣타워',cost:650,left:'55%',bottom:'41%',art:1,description:'높이 올라 쉬는 고양이를 위한 선물'},
+    {id:'wheel',name:'원목 캣휠',cost:900,left:'28%',bottom:'37%',art:0,description:'활동적인 친구에게 어울리는 큰 선물'},
+    {id:'robot',name:'럭셔리 자동화장실',cost:1200,left:'87%',bottom:'32%',art:4,description:'동그란 미래형 디자인의 최고급 소품'}
+  ];
   let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false};
   const number=(n,max=1000000)=>Number.isFinite(n)?Math.max(0,Math.min(max,n)):0;
   try {const saved=JSON.parse(localStorage.getItem('cozy-cat-progress'));if(saved){progress.xp=number(saved.xp);progress.owned=items.filter(i=>saved.owned?.includes(i.id)).map(i=>i.id);progress.shown=progress.owned.filter(id=>saved.shown?.includes(id));if(saved.day===day()){progress.counts={meal:number(saved.counts?.meal),pet:number(saved.counts?.pet),play:number(saved.counts?.play)};progress.claimed=saved.claimed===true}state.poops=Math.floor(number(saved.poops,999));state.hearts=number(saved.hearts);state.full=number(saved.full,100);state.happy=number(saved.happy,100)}}catch{}
@@ -8,7 +18,38 @@
   function freshDay(){if(progress.day!==day()){progress.day=day();progress.counts={meal:0,pet:0,play:0};progress.claimed=false}}
   const missions=[['meal','든든하게 한 끼',1],['pet','다정하게 쓰다듬기',3],['play','낚싯대로 한 번 놀기',1]];
   let lastUI="";
-  function update(){freshDay();const ui=JSON.stringify([progress,state.hearts]);if(ui===lastUI){save();return}lastUI=ui;const level=Math.floor(progress.xp/40)+1;const titles=['작은 인사','익숙한 손길','단짝 친구','마음이 통하는 사이','평생 집사'];$('bondTitle').textContent='Lv.'+level+' '+titles[Math.min(4,level-1)];$('bondNext').textContent='다음 단계까지 '+(40-progress.xp%40)+' 마음';$('bondProgress').value=progress.xp%40;$('level').textContent=titles[Math.min(4,level-1)];$('quests').replaceChildren(...missions.map(([id,label,target])=>{const li=document.createElement('li');li.textContent=(progress.counts[id]>=target?'✓ ':'○ ')+label+' '+Math.min(target,progress.counts[id])+'/'+target;return li}));$('claimQuest').disabled=progress.claimed||!missions.every(([id,,target])=>progress.counts[id]>=target);$('claimQuest').textContent=progress.claimed?'오늘의 선물 받았어요 ✓':'미션 선물 받기 · 하트 +15';$('shopItems').replaceChildren(...items.map(item=>{const owned=progress.owned.includes(item.id),shown=progress.shown.includes(item.id),b=document.createElement('button');b.innerHTML='<span aria-hidden="true">'+item.icon+'</span>'+item.name+'<small>'+(owned?(shown?'놓는 중 ✓ · 넣어두기':'보관 중 · 꺼내기'):'♥ '+item.cost)+'</small>';b.setAttribute('aria-pressed',String(shown));b.onclick=()=>{if(!owned){if(state.hearts<item.cost){$('funMessage').textContent='하트 '+(item.cost-state.hearts)+'개를 더 모으면 살 수 있어요.';return}state.hearts-=item.cost;progress.owned.push(item.id);progress.shown.push(item.id);$('funMessage').textContent=item.name+' 선물이 도착했어요!';hearts()}else{progress.shown=shown?progress.shown.filter(id=>id!==item.id):[...progress.shown,item.id]}render()};return b}));$('roomDecor').replaceChildren(...items.filter(i=>progress.shown.includes(i.id)).map(item=>{const span=document.createElement('span');span.textContent=item.icon;span.style.left=item.left;span.setAttribute('aria-label',item.name);return span}));save()}
+  function update(){freshDay();const ui=JSON.stringify([progress,state.hearts]);if(ui===lastUI){save();return}lastUI=ui;const level=Math.floor(progress.xp/40)+1;const titles=['작은 인사','익숙한 손길','단짝 친구','마음이 통하는 사이','평생 집사'];$('bondTitle').textContent='Lv.'+level+' '+titles[Math.min(4,level-1)];$('bondNext').textContent='다음 단계까지 '+(40-progress.xp%40)+' 마음';$('bondProgress').value=progress.xp%40;$('level').textContent=titles[Math.min(4,level-1)];$('quests').replaceChildren(...missions.map(([id,label,target])=>{const li=document.createElement('li');li.textContent=(progress.counts[id]>=target?'✓ ':'○ ')+label+' '+Math.min(target,progress.counts[id])+'/'+target;return li}));$('claimQuest').disabled=progress.claimed||!missions.every(([id,,target])=>progress.counts[id]>=target);$('claimQuest').textContent=progress.claimed?'오늘의 선물 받았어요 ✓':'미션 선물 받기 · 하트 +15';renderShop();$('roomDecor').replaceChildren(...items.filter(i=>progress.shown.includes(i.id)).map(item=>{const span=document.createElement('span');if(item.art!==undefined){span.className='premium-decor furniture-art art-'+item.art;span.style.bottom=item.bottom;span.dataset.item=item.id}else{span.textContent=item.icon}span.style.left=item.left;span.setAttribute('role','img');span.setAttribute('aria-label',item.name);return span}));save()}
+  function renderShop(){
+    $('shopBalance').textContent='보유 하트 ♥ '+state.hearts;
+    const sections=[['작은 선물',items.filter(i=>i.art===undefined)],['프리미엄 컬렉션',items.filter(i=>i.art!==undefined)]];
+    $('shopItems').replaceChildren(...sections.map(([title,collection])=>{
+      const section=document.createElement('section'),heading=document.createElement('h3'),grid=document.createElement('div');
+      heading.textContent=title;grid.className='shop-grid';section.append(heading,grid);
+      grid.replaceChildren(...collection.map(item=>{
+        const owned=progress.owned.includes(item.id),shown=progress.shown.includes(item.id),card=document.createElement('button');
+        card.className='shop-item';card.setAttribute('aria-pressed',String(shown));
+        const art=document.createElement('span');art.setAttribute('aria-hidden','true');
+        if(item.art!==undefined)art.className='furniture-art art-'+item.art;else art.textContent=item.icon;
+        const name=document.createElement('strong');name.textContent=item.name;
+        const description=document.createElement('span');description.className='item-description';description.textContent=item.description||'우리 방에 작은 행복을 더해요';
+        const price=document.createElement('small');price.textContent=owned?(shown?'배치 중 ✓ · 보관하기':'보관 중 · 꺼내기'):'♥ '+item.cost;
+        card.append(art,name,description,price);
+        card.onclick=()=>{
+          if(!progress.owned.includes(item.id)){
+            if(state.hearts<item.cost){$('funMessage').textContent=item.name+'까지 하트 '+(item.cost-state.hearts)+'개 더 모아 주세요.';return}
+            state.hearts-=item.cost;progress.owned.push(item.id);progress.shown.push(item.id);
+            $('funMessage').textContent=item.name+' 선물이 도착했어요! 방에 배치했어요.';hearts();
+          }else{
+            const visible=progress.shown.includes(item.id);
+            progress.shown=visible?progress.shown.filter(id=>id!==item.id):[...progress.shown,item.id];
+            $('funMessage').textContent=item.name+(visible?'을 보관했어요. 다시 꺼낼 때 하트는 들지 않아요.':'을 방에 꺼냈어요.');
+          }
+          render();
+        };
+        return card;
+      }));return section;
+    }));
+  }
   const originalRender=render;render=()=>{originalRender();update();$('level').textContent=$('bondTitle').textContent.replace(/^Lv\.\d+ /,'')};
   let playing=false,hits=0;
   const originalAct=act;act=async action=>{if(playing){say('깃털을 같이 잡아 보자냥!');return{ok:false,message:'낚싯대 놀이 중이에요.'}}const result=await originalAct(action);if(result.ok){freshDay();if(action==='meal'||action==='pet')progress.counts[action]++;progress.xp+=action==='nap'?1:action==='pet'?3:5;render()}return result};

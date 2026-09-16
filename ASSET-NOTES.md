@@ -1,5 +1,15 @@
 # Room artwork
 
+## Premium furniture atlas
+
+Final project asset: `dist/assets/premium-furniture.png`. Built-in ImageGen generation in a 3 × 2 grid, used as illustrated shop cards and room decorations. The selected original PNG has verified RGBA transparency. A separate background-edit variant was not selected.
+
+Generation prompt: Use case: stylized-concept. Asset: game furniture sprite atlas. Create a precise 3-column by 2-row grid, total canvas 1536x1024, each of the six equal cells 512x512. Transparent background, no grid lines, no text, no labels, no cats, no room scenery, no shadows outside each object's cell. Each object centered within its own cell with generous 15% empty padding, fully contained with no overlap. Style: warm soft gouache 2.5D cozy cat game furniture, cream and honey wood with sage details. Top left: premium circular wooden cat exercise wheel on a sturdy wood base. Top middle: tall luxury natural wood cat tree with three platforms and cream fabric hammock. Top right: smart automatic cat feeder, cream rounded dispenser with clear kibble reservoir and small food bowl. Bottom left: elegant sage and white pet water fountain with visible small blue water stream. Bottom middle: premium round enclosed automatic litter box, white egg shaped shell with dark entry opening, sage base. Bottom right: luxurious rattan cat bed basket with fluffy cream cushion. Each object drawn at consistent front three-quarter angle. All six distinct products must be recognizable, polished game inventory art.
+
+Edit prompt: Remove all background pixels to transparent alpha; preserve the six furniture silhouettes, their colors, scale, and 3-column by 2-row arrangement. Preserve product interiors and remove background between wheel and tower structures.
+
+Product inspiration: [One Fast Cat exercise wheel](https://onefastcat.com/products/cat-wheel), [PETKIT feeders and fountains](https://www.petkit.com/), [Litter-Robot 4](https://www.litter-robot.com/litter-robot-4.html). In-game items are original decorative illustrations, not branded replicas or real-money purchases.
+
 ## Social sharing card
 
 Asset: `dist/assets/og-cat-room-v1.png`. Created with the built-in ImageGen tool for KakaoTalk / Open Graph sharing.
