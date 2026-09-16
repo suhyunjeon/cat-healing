@@ -20,12 +20,15 @@ function selectCharacter(key,save=false){if(!Object.hasOwn(characters,key))throw
 let savedCharacter='cheese';try{const saved=localStorage.getItem('cozy-cat-character');if(Object.hasOwn(characters,saved))savedCharacter=saved}catch{}selectCharacter(savedCharacter);document.querySelectorAll('[name="character"]').forEach(input=>input.addEventListener('change',()=>selectCharacter(input.value,true)));
 
 function renderToilet(){
-  $('toiletCount').textContent=state.poops?'맛동산 '+state.poops+'개':'깨끗한 모래';
+  // Do not re-announce unchanged status on every hunger/water timer tick.
+  const text=(id,value)=>{if($(id).textContent!==value)$(id).textContent=value};
+  text('toiletCount',state.poops?'맛동산 '+state.poops+'개':'깨끗한 모래');
   $('litterBox').classList.toggle('has-poop',state.poops>0);
   $('litterBox').setAttribute('aria-label','화장실 열기 · '+$('toiletCount').textContent);
-  $('litterContents').textContent=state.poops?'💩 '.repeat(Math.min(state.poops,12)):'✨';
-  $('toiletMessage').textContent=state.toileting?'쉬… 지금 화장실에 있는 중이에요.':state.poops?'맛동산 '+state.poops+'개가 생겼어요! 모래를 치워 주세요.':'보송보송 깨끗한 모래예요.';
-  $('cleanToilet').disabled=!state.poops||state.toileting;
+  text('litterContents',state.poops?'💩 '.repeat(Math.min(state.poops,12)):'✨');
+  text('toiletMessage',state.toileting?'쉬… 지금 화장실에 있는 중이에요.':state.poops?'맛동산 '+state.poops+'개가 생겼어요! 모래를 치워 주세요.':'청소 완료! 보송보송 깨끗한 모래예요.');
+  text('cleanToilet',state.toileting?'고양이가 사용 중이에요':state.poops?'모래 치우기':'완료 · 방으로 돌아가기');
+  $('cleanToilet').disabled=state.toileting;
 }
 async function useToilet(){
   if(state.busy||state.sleeping)return;
@@ -41,4 +44,10 @@ async function useToilet(){
 }
 $('openToilet').onclick=$('litterBox').onclick=()=>{renderToilet();$('toiletDialog').showModal()};
 $('closeToilet').onclick=()=>$('toiletDialog').close();
-$('cleanToilet').onclick=()=>{if(state.toileting)return;state.poops=0;render();say('깨끗하게 치워 줘서 고마워, 집사야!')};
+$('cleanToilet').onclick=()=>{
+  if(state.toileting)return;
+  if(!state.poops){$('toiletDialog').close();return}
+  state.poops=0;
+  render();
+  say('깨끗하게 치워 줘서 고마워, 집사야!');
+};
