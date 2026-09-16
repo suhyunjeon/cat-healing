@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: cat-healing
+    runtime: static
+    branch: main
+    buildCommand: "echo 'Static files are ready'"
+    staticPublishPath: ./dist

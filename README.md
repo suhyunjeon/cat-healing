@@ -20,6 +20,22 @@ python3 -m http.server 5188 --directory dist
 
 브라우저에서 <http://localhost:5188>을 여세요.
 
+## Render 배포
+
+Render에서 **New → Static Site**를 선택하고 이 GitHub 저장소를 연결하세요.
+
+| 설정 | 값 |
+| --- | --- |
+| Branch | `main` |
+| Build Command | `echo 'Static files are ready'` |
+| Publish Directory | `dist` |
+
+Root Directory는 비워 둡니다. Start Command와 환경 변수는 필요하지 않습니다.
+배포가 완료되면 Render가 발급한 `https://…onrender.com` 주소로 접속하세요.
+
+또는 **New → Blueprint**에서 저장소를 연결하면 루트의 `render.yaml` 설정을 사용할 수 있습니다.
+기존 사이트와 Render 사이트는 주소가 다르므로 저장한 이름과 캐릭터는 서로 공유되지 않습니다.
+
 ## 파일
 
 - `dist/index.html`: 게임 화면과 SVG 캐릭터
