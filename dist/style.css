@@ -12,3 +12,12 @@
 .drinking .head{animation:drink .65s ease-in-out infinite}
 @keyframes drink{0%,100%{transform:translateY(8px) rotate(8deg)}50%{transform:translateY(15px) rotate(11deg)}}
 @media(max-width:700px){.going-to-water .cat-anchor{left:56%;top:43%;width:36%}.going-to-water .cat-anchor:after{content:'🥣';position:absolute;bottom:0;left:31%;font-size:32px;filter:hue-rotate(165deg);pointer-events:none}}
+
+.coat-patches{display:none;pointer-events:none}
+#cat[data-character=calico] .coat-patches,#cat[data-character=tortie] .coat-patches{display:block}
+.orange-patch{fill:#ce955e}.dark-patch,.small-patch{fill:#454039}
+#cat[data-character=tortie] .dark-patch{fill:#c1864d}
+#cat[data-character=tortie] .small-patch{fill:#d9a168}
+#cat[data-character=munchkin] .cat-body{transform:translateY(147px) scaleY(.65)}
+#cat[data-character=munchkin] .head-pose{transform:translateY(40px)}
+.cat-card small{text-align:center;line-height:1.45}.cat-card svg{height:57px}
