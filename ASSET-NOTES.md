@@ -33,3 +33,7 @@ Use case: stylized-concept. Asset: landscape background for a cozy interactive c
 - 파일: `dist/assets/og-aebong-v2.png`
 - 기본 내장 image_gen 도구로 기존 공유 이미지 편집.
 - 프롬프트: 기존 그림·구도·부제는 유지하고 제목 “두부의 작은 식탁”만 “애봉이의 식탁”으로 교체.
+
+## 방꾸미기 액세서리
+- 파일: `dist/assets/cozy-accessories.png`
+- 내장 image_gen 사용. 프롬프트: 투명 배경의 2×2 수채화 소품 시트, 왼쪽 위 하트 원목 고급 빗, 오른쪽 위 세이지 체크 담요, 왼쪽 아래 크림색 이동장, 오른쪽 아래 곡선 골판지 스크래쳐. 글자·브랜드 없이 기존 포근한 방과 어울리는 색상.
