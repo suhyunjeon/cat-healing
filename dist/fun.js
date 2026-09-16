@@ -12,14 +12,20 @@
     {id:'robot',name:'럭셔리 자동화장실',cost:1200,left:'87%',bottom:'32%',art:4,description:'동그란 미래형 디자인의 최고급 소품'},
     {id:'goldTower',name:'순금 캣타워',cost:5000,left:'42%',bottom:'39%',art:'gold',description:'반짝이는 황금빛, 집사를 위한 꿈의 선물'}
   ];
-  let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false};
+  const careItems=[
+    {id:'probiotic',name:'유산균',icon:'🫙',cost:30,description:'매일 챙기는 작은 관심'},
+    {id:'omega',name:'오메가3',icon:'🐟',cost:50,description:'차곡차곡 쌓는 돌봄 습관'},
+    {id:'stemcell',name:'줄기세포',icon:'🔬',cost:300,description:'특별한 가상 케어 체험'},
+    {id:'exosome',name:'엑소좀',icon:'🫧',cost:500,description:'반짝이는 가상 케어 체험'}
+  ];
+  let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false,careDone:[]};
   const number=(n,max=1000000)=>Number.isFinite(n)?Math.max(0,Math.min(max,n)):0;
-  try {const saved=JSON.parse(localStorage.getItem('cozy-cat-progress'));if(saved){progress.xp=number(saved.xp);progress.owned=items.filter(i=>saved.owned?.includes(i.id)).map(i=>i.id);progress.shown=progress.owned.filter(id=>saved.shown?.includes(id));if(saved.day===day()){progress.counts={meal:number(saved.counts?.meal),pet:number(saved.counts?.pet),play:number(saved.counts?.play)};progress.claimed=saved.claimed===true}state.poops=Math.floor(number(saved.poops,999));state.pees=Math.floor(number(saved.pees,999));state.hearts=number(saved.hearts);state.full=number(saved.full,100);state.happy=number(saved.happy,100)}}catch{}
+  try {const saved=JSON.parse(localStorage.getItem('cozy-cat-progress'));if(saved){progress.xp=number(saved.xp);progress.owned=items.filter(i=>saved.owned?.includes(i.id)).map(i=>i.id);progress.shown=progress.owned.filter(id=>saved.shown?.includes(id));if(saved.day===day()){progress.counts={meal:number(saved.counts?.meal),pet:number(saved.counts?.pet),play:number(saved.counts?.play)};progress.claimed=saved.claimed===true;progress.careDone=careItems.filter(item=>Array.isArray(saved.careDone)&&saved.careDone.includes(item.id)).map(item=>item.id)}state.poops=Math.floor(number(saved.poops,999));state.pees=Math.floor(number(saved.pees,999));state.hearts=number(saved.hearts);state.full=number(saved.full,100);state.happy=number(saved.happy,100)}}catch{}
   function save(){try{localStorage.setItem('cozy-cat-progress',JSON.stringify({...progress,poops:state.poops,pees:state.pees,hearts:state.hearts,full:state.full,happy:state.happy}))}catch{$('funMessage').textContent='이 브라우저에서는 진행을 저장할 수 없어요.'}}
-  function freshDay(){if(progress.day!==day()){progress.day=day();progress.counts={meal:0,pet:0,play:0};progress.claimed=false}}
+  function freshDay(){if(progress.day!==day()){progress.day=day();progress.counts={meal:0,pet:0,play:0};progress.claimed=false;progress.careDone=[]}}
   const missions=[['meal','든든하게 한 끼',1],['pet','다정하게 쓰다듬기',3],['play','낚싯대로 한 번 놀기',1]];
   let lastUI="";
-  function update(){freshDay();const ui=JSON.stringify([progress,state.hearts]);if(ui===lastUI){save();return}lastUI=ui;const level=Math.floor(progress.xp/40)+1;const titles=['작은 인사','익숙한 손길','단짝 친구','마음이 통하는 사이','평생 집사'];$('bondTitle').textContent='Lv.'+level+' '+titles[Math.min(4,level-1)];$('bondNext').textContent='다음 단계까지 '+(40-progress.xp%40)+' 마음';$('bondProgress').value=progress.xp%40;$('level').textContent=titles[Math.min(4,level-1)];$('quests').replaceChildren(...missions.map(([id,label,target])=>{const li=document.createElement('li');li.textContent=(progress.counts[id]>=target?'✓ ':'○ ')+label+' '+Math.min(target,progress.counts[id])+'/'+target;return li}));$('claimQuest').disabled=progress.claimed||!missions.every(([id,,target])=>progress.counts[id]>=target);$('claimQuest').textContent=progress.claimed?'오늘의 선물 받았어요 ✓':'미션 선물 받기 · 하트 +15';renderShop();$('roomDecor').replaceChildren(...items.filter(i=>progress.shown.includes(i.id)).map(item=>{const span=document.createElement('span');if(item.art!==undefined){span.className='premium-decor furniture-art art-'+item.art;span.style.bottom=item.bottom;span.dataset.item=item.id}else{span.textContent=item.icon}span.style.left=item.left;span.setAttribute('role','img');span.setAttribute('aria-label',item.name);return span}));save()}
+  function update(){freshDay();const ui=JSON.stringify([progress,state.hearts]);if(ui===lastUI){save();return}lastUI=ui;const level=Math.floor(progress.xp/40)+1;const titles=['작은 인사','익숙한 손길','단짝 친구','마음이 통하는 사이','평생 집사'];$('bondTitle').textContent='Lv.'+level+' '+titles[Math.min(4,level-1)];$('bondNext').textContent='다음 단계까지 '+(40-progress.xp%40)+' 마음';$('bondProgress').value=progress.xp%40;$('level').textContent=titles[Math.min(4,level-1)];$('quests').replaceChildren(...missions.map(([id,label,target])=>{const li=document.createElement('li');li.textContent=(progress.counts[id]>=target?'✓ ':'○ ')+label+' '+Math.min(target,progress.counts[id])+'/'+target;return li}));$('claimQuest').disabled=progress.claimed||!missions.every(([id,,target])=>progress.counts[id]>=target);$('claimQuest').textContent=progress.claimed?'오늘의 선물 받았어요 ✓':'미션 선물 받기 · 하트 +15';renderShop();renderHealth();$('roomDecor').replaceChildren(...items.filter(i=>progress.shown.includes(i.id)).map(item=>{const span=document.createElement('span');if(item.art!==undefined){span.className='premium-decor furniture-art art-'+item.art;span.style.bottom=item.bottom;span.dataset.item=item.id}else{span.textContent=item.icon}span.style.left=item.left;span.setAttribute('role','img');span.setAttribute('aria-label',item.name);return span}));save()}
   function renderShop(){
     $('shopBalance').textContent='보유 하트 ♥ '+state.hearts;
     const sections=[['작은 선물',items.filter(i=>i.art===undefined)],['프리미엄 컬렉션',items.filter(i=>i.art!==undefined)]];
@@ -49,6 +55,28 @@
         };
         return card;
       }));return section;
+    }));
+  }
+  function renderHealth(){
+    $('healthBalance').textContent='보유 하트 ♥ '+state.hearts;
+    $('healthCount').textContent='오늘의 돌봄 '+progress.careDone.length+' / '+careItems.length;
+    $('healthItems').replaceChildren(...careItems.map(item=>{
+      const done=progress.careDone.includes(item.id),card=document.createElement('article');card.className='health-card';
+      const icon=document.createElement('span');icon.className='health-icon';icon.textContent=item.icon;icon.setAttribute('aria-hidden','true');
+      const title=document.createElement('h3');title.textContent=item.name;
+      const description=document.createElement('p');description.textContent=item.description;
+      const effect=document.createElement('small');effect.textContent='게임 행복 +5 · 하루 1회';
+      const button=document.createElement('button');button.className='fun-button';button.disabled=done;button.textContent=done?'오늘 돌봄 완료 ✓':'♥ '+item.cost+' · 돌봐주기';
+      button.onclick=()=>{
+        freshDay();
+        if(progress.careDone.includes(item.id))return;
+        if(state.busy||state.sleeping){$('healthMessage').textContent=state.sleeping?'고양이가 일어나면 돌봐 주세요.':'하던 일을 마치면 돌봐 주세요.';return}
+        if(state.hearts<item.cost){$('healthMessage').textContent=item.name+' 돌봄까지 하트 '+(item.cost-state.hearts)+'개가 더 필요해요.';return}
+        state.hearts-=item.cost;state.happy=Math.min(100,state.happy+5);progress.careDone.push(item.id);
+        $('healthMessage').textContent=item.name+' 가상 돌봄 완료! 오늘의 도장을 남겼어요.';
+        say('오늘도 다정하게 챙겨 줘서 고마워!');hearts();render();
+      };
+      card.append(icon,title,description,effect,button);return card;
     }));
   }
   const originalRender=render;render=()=>{originalRender();update();$('level').textContent=$('bondTitle').textContent.replace(/^Lv\.\d+ /,'')};
