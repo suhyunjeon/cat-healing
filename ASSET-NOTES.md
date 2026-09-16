@@ -1,5 +1,11 @@
 # Room artwork
 
+## Solid-gold cat tower
+
+Asset: `dist/assets/gold-cat-tower.png`. Generated with built-in ImageGen for a 5,000-heart decorative item.
+
+Final prompt: Create a single premium solid-gold cat tower furniture sprite for a cozy cat care game, transparent RGBA background. Entire structure is lustrous polished yellow gold: broad sturdy gold base, three gold posts and staggered round gold platforms, ornate gold cat-shaped finial, small cream cushion on top. Recognizable tall cat climbing tree, extravagant but cute, no cats, no text, no room, no background. Warm storybook gouache 2.5D rendering with beautiful gold highlights, consistent front three-quarter view, full object centered in a square canvas with 12 percent clear margin all around. Actual transparent alpha outside the silhouette. Match soft cream, sage and honey wood cozy game visual style while making this product unmistakably solid gold.
+
 ## Premium furniture atlas
 
 Final project asset: `dist/assets/premium-furniture.png`. Built-in ImageGen generation in a 3 × 2 grid, used as illustrated shop cards and room decorations. The selected original PNG has verified RGBA transparency. A separate background-edit variant was not selected.

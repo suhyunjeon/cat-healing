@@ -9,7 +9,8 @@
     {id:'rattan',name:'라탄 라운지 침대',cost:450,left:'14%',bottom:'25%',art:5,description:'폭신한 쿠션을 품은 아늑한 쉼터'},
     {id:'tower',name:'원목 캣타워',cost:650,left:'55%',bottom:'41%',art:1,description:'높이 올라 쉬는 고양이를 위한 선물'},
     {id:'wheel',name:'원목 캣휠',cost:900,left:'28%',bottom:'37%',art:0,description:'활동적인 친구에게 어울리는 큰 선물'},
-    {id:'robot',name:'럭셔리 자동화장실',cost:1200,left:'87%',bottom:'32%',art:4,description:'동그란 미래형 디자인의 최고급 소품'}
+    {id:'robot',name:'럭셔리 자동화장실',cost:1200,left:'87%',bottom:'32%',art:4,description:'동그란 미래형 디자인의 최고급 소품'},
+    {id:'goldTower',name:'순금 캣타워',cost:5000,left:'42%',bottom:'39%',art:'gold',description:'반짝이는 황금빛, 집사를 위한 꿈의 선물'}
   ];
   let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false};
   const number=(n,max=1000000)=>Number.isFinite(n)?Math.max(0,Math.min(max,n)):0;
