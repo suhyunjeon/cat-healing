@@ -1,5 +1,12 @@
 # Room artwork
 
+## Social sharing card
+
+Asset: `dist/assets/og-cat-room-v1.png`. Created with the built-in ImageGen tool for KakaoTalk / Open Graph sharing.
+
+Final prompt: Use case: ads-marketing. Create a finished Open Graph social sharing card for a Korean cozy cat care browser game. Landscape approximately 1.91:1, ideally 1200x630. Warm soft gouache storybook illustration, golden sunlight, cream walls, sage gingham sofa, leafy plants and wooden floor in a cozy cat room. A very cute round cheese-colored cat and a gray cat together in the right half beside a small food bowl, relaxed smiling eyes and soft rounded paws. Left half is uncluttered warm cream with the exact large Korean headline '두부의 작은 식탁' and below in smaller readable Korean '밥 주고, 쓰다듬고, 함께 쉬어요'. Beautiful professionally typeset dark warm brown Korean text, plenty of margins, legible at small thumbnail size. Cozy cream, sage, honey and soft peach palette matching a comforting cat game. Finished polished promotional artwork, no UI controls, no device frame, no watermark. Keep all important text and both cats inside a generous safe area.
+
+
 Generated with the built-in ImageGen tool. Project asset: `dist/assets/cozy-room.png`.
 
 ## Final prompt
