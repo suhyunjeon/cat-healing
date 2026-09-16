@@ -15,7 +15,7 @@
   const careItems=[
     {id:'probiotic',name:'유산균',icon:'🫙',cost:30,description:'매일 챙기는 작은 관심'},
     {id:'omega',name:'오메가3',icon:'🐟',cost:50,description:'차곡차곡 쌓는 돌봄 습관'},
-    {id:'stemcell',name:'줄기세포',icon:'🔬',cost:300,description:'특별한 가상 케어 체험'},
+    {id:'stemcell',name:'줄기세포',icon:'🔬',cost:1000,description:'특별한 가상 케어 체험'},
     {id:'exosome',name:'엑소좀',icon:'🫧',cost:500,description:'반짝이는 가상 케어 체험'}
   ];
   let progress={xp:0,owned:[],shown:[],day:day(),counts:{meal:0,pet:0,play:0},claimed:false,careDone:[]};
